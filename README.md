@@ -20,7 +20,7 @@
 
 `.vimrc` served as customised configurations for Vim. For macOS, it's normally saved under the user's home directory as a hidden file. In other cases, Vim checks the other potential paths in the following order:
 
-1. $VIMINIT`
+1. `$VIMINIT`
 2. `$HOME/.vimrc`
 3. `$HOME/.vim/vimrc`
 4. `$EXINIT`
