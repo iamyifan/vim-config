@@ -1,6 +1,6 @@
 [toc]
 
-# Vim Note and Configuration Log
+# Vim Notebook
 
 ## Reference
 
@@ -108,11 +108,4 @@ A `mapleader` is an unused key conjucted with other keys to create new mappings.
 |`(.*)`|Any group capture|
 |`(abc|def)`|Match abc or def|
 
-## Oh My Zsh
-
-
-
-
-
-## vim-plug
-
+## Plug-ins Management via `vim-plug`
