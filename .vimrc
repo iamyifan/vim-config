@@ -146,7 +146,7 @@ augroup ENDi
 " }}}
 
 
-" Plugin ---------------------------------------{{{
+" Plugins ---------------------------------------{{{
 " 
 " Vim plugins employed by vim-plug
 " Use single quote: 'user/repo'
@@ -172,9 +172,23 @@ autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' 
     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
 " lightline.vim
-let g:lightline={'colorscheme':'deus'}
+let g:lightline={'colorscheme':'deus'} 
 
 " papercolor-theme
+let g:PaperColor_Theme_Options = {
+  \   'theme': {
+  \     'default.dark': {
+  \       'override' : {
+  \         'folded_fg' : ['', '70'],
+  \         'folded_bg' : ['', '234'],
+  \         'color05' : ['', '245'],
+  \         'linenumber_fg' : ['', '245'],
+  \         'vertsplit_fg' : ['', '245'],
+  \         'matchparen_bg' : ['', '245'],
+  \       }
+  \     }
+  \   }
+  \ }
 set background=dark
 colorscheme PaperColor
 
