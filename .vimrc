@@ -1,96 +1,71 @@
-" Settings  ---------------------------------------{{{ 
+" Settings {{{
 
-" Ensure the Backspace key behaves normally in insert mode
+" Ensure the backspace key behaves normally 
 set backspace=indent,eol,start
 
-" Set the internal encoding of Vim to UTF-8 
-set encoding=utf-8 
+" Specify the internal and file encoding for Vim
+set encoding=utf-8 fileencoding=utf-8
 
-" Set the encoding of current file to UTF-8
-set fileencoding=utf-8
-
-" Enable terminal to support 256 colours
+" Enable the terminal to support 256 colours
 set t_Co=256
+
+" Ask for confirmation when necessary
+set confirm
+
+" Enable mouse operations if available
+set mouse=a
 
 " Enable file type detection
 filetype on
 
-" Enable plugins and load plugins for the detected file type
+" Enable file type-specific plugins 
 filetype plugin on
 
-" Load an indent file for the detected file type
+" Intentation settings
+" expandtab: convert tabs to spaces
+" tabstop: how many spaces a tab is displayed as
+" softtabstop: how many spaces a tab counts for
+" shiftwidth: how much text shifts when indenting/unindenting
+" Specify the global indentations settings
+set expandtab tabstop=4 softtabstop=4 shiftwidth=4
+" Enable file type-specific indentation
 filetype indent on
+" Specify indentation settings for Shell scripts
+autocmd FileType zsh,sh setlocal tabstop=2 shiftwidth=2 softtabstop=2
+" Specify indentation settings for Python scripts
+autocmd FileType py setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
-" Enable syntax highlight
-syntax on
+" Enable syntax highlighting while keeping customised colours
 syntax enable
 
-" Toggle line numbers on the left-hand side
-set number
+" Show absolute and relative line number of the current line
+set number relativenumber
 
-" Show relative line numbers from the cursor's line
-set relativenumber
-
-" Highlight the row of current cursor 
-set cursorline
+" Highlight the current line and column
+set cursorline cursorcolumn
 
 " Set the time for waiting time of sequential keyboard input
 set ttimeoutlen=0
 
-" Set colour scheme for cursorline
-hi cursorline cterm=none ctermbg=none ctermfg=none
-
-" Set colour scheme for line number of the current cursor
-hi cursorlinenr cterm=none ctermbg=yellow ctermfg=red
-
-" Highlight the column of current cursor
-" set cursorcolumn
-
-" Global indentation settings
-" Set how many spaces a tab is displayed as
-set tabstop=4
-" Set how many spaces are inserted when pressing a tab
-set softtabstop=4
-" Set how many spaces for each level of indentation
-set shiftwidth=4
-" Convert a tab into spaces
-set expandtab
-
-" Zsh/Bash indentation settings
-autocmd FileType zsh setlocal tabstop=2 shiftwidth=2 softtabstop=2
-autocmd FileType sh setlocal tabstop=2 shiftwidth=2 softtabstop=2
-
 " Disable warpping for long lines
 set nowrap
 
-" Ignore capitalise letters during search
-set ignorecase
-
-" Highlight all matched cases, use ':noh' to clear
-set hlsearch
-
-" Highlight dynamically when matching
-set incsearch
+" Search settings
+" ignorecase: ignore capitalised letters in searching
+" hlsearch: highlight all matched cases
+" incsearch: dynamically highlight matched cases
+set ignorecase hlsearch incsearch
 
 " Always show a status line even if there is only one window 
 set laststatus=2
 
-" Enable mouse operation if available
-set mouse=a
-
-" Enable auto completion after pressing Tab
-set wildmenu
-
-" Adust the auto completion acting like normal completion in zsh
-set wildmode=list:longest
-
-" Ask for confirmation when necessary (e.g. quit unsaved file)
-set confirm
+" Enable auto completion after pressing the tab key
+set wildmenu wildmode=list:longest
 
 " }}}
 
 
-" Mappings ---------------------------------------{{{ 
+" Mappings {{{ 
               
 " Set the leader key
 let mapleader='\'
@@ -117,8 +92,16 @@ nnoremap <leader>= <c-w>+
 nnoremap <leader>- <c-w>-
 nnoremap <leader>, <c-w><
 nnoremap <leader>. <c-w>>
+inoremap <leader>= <c-w>+
+inoremap <leader>- <c-w>-
+inoremap <leader>, <c-w><
+inoremap <leader>. <c-w>>
+vnoremap <leader>= <c-w>+
+vnoremap <leader>- <c-w>-
+vnoremap <leader>, <c-w><
+noremap <leader>. <c-w>>
 
-" Switch to the normal mode
+" Switch to normal mode
 inoremap <leader><leader> <esc>
 vnoremap <leader><leader> <esc>
 
@@ -130,23 +113,22 @@ vnoremap <leader>s <esc>:w<cr>
 " }}}
 
 
-" Folding ---------------------------------------{{{
+" Folding {{{
 
 " zo: open current folding
 " zc: close current folding
-" zR: open all folding
-" zM: close all folding
+" zR: open all foldings
+" zM: close all foldings
 augroup filetype_vim
     autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
-    autocmd FileType zsh setlocal foldmethod=marker
-    autocmd FileType python setlocal foldmethod=indent  " fold .py files based on indent
-augroup ENDi
+    autocmd FileType vim,zsh,sh setlocal foldmethod=marker
+    autocmd FileType python setlocal foldmethod=indent
+augroup END
 
 " }}}
 
 
-" Plugins ---------------------------------------{{{
+" Plugins {{{
 " 
 " Vim plugins employed by vim-plug
 " Use single quote: 'user/repo'
@@ -155,12 +137,12 @@ augroup ENDi
 call plug#begin('~/.vim/plugged')
 Plug 'preservim/nerdtree'           " Menu bar
 Plug 'itchyny/lightline.vim'        " Status line
-Plug 'NLKNguyen/papercolor-theme'   " Theme
-Plug 'vim-python/python-syntax'     " Python syntax highlight
+Plug 'NLKNguyen/papercolor-theme'   " Vim theme
+Plug 'vim-python/python-syntax'     " Python syntax highlighter
 Plug 'ervandew/supertab'            " Auto-completion
 call plug#end()
 
-" NERDTree
+" NERDTree: Menu bar
 " Open NERDTree
 nnoremap <leader>[ :NERDTree<cr>
 " Close NERDTree
@@ -171,10 +153,11 @@ let NERDTreeShowHidden=1
 autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
-" lightline.vim
-let g:lightline={'colorscheme':'deus'} 
+" lightline.vim: Status line
+" Path: ~/.Vim/plugged/lightline.vim/autoload/lightline/colorscheme
+let g:lightline={'colorscheme':'one'}
 
-" papercolor-theme
+" papercolor-theme: Vim theme
 let g:PaperColor_Theme_Options = {
   \   'theme': {
   \     'default.dark': {
@@ -182,9 +165,15 @@ let g:PaperColor_Theme_Options = {
   \         'folded_fg' : ['', '70'],
   \         'folded_bg' : ['', '234'],
   \         'color05' : ['', '245'],
+  \         'color13' : ['', '120'],
+  \         'search_bg' : ['', '183'],
+  \         'incsearch_fg' : ['', '183'],
   \         'linenumber_fg' : ['', '245'],
+  \         'linenumber_bg' : ['', '234'],
   \         'vertsplit_fg' : ['', '245'],
   \         'matchparen_bg' : ['', '245'],
+  \         'cursorlinenr_fg' : ['', '255'],
+  \         'cursorlinenr_bg' : ['', '236'],
   \       }
   \     }
   \   }
