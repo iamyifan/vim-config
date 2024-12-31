@@ -15,6 +15,9 @@ set confirm
 " Enable mouse operations if available
 set mouse=a
 
+" Allow Vim to copy to clipboard
+set clipboard=unnamed
+
 " Enable file type detection
 filetype on
 
@@ -41,8 +44,8 @@ syntax enable
 " Show absolute and relative line number of the current line
 set number relativenumber
 
-" Highlight the current line and column
-set cursorline cursorcolumn
+" Highlight the current line 
+set cursorline 
 
 " Set the time for waiting time of sequential keyboard input
 set ttimeoutlen=0
@@ -65,8 +68,8 @@ set wildmenu wildmode=list:longest
 " }}}
 
 
-" Mappings {{{ 
-              
+" Mappings {{{
+
 " Set the leader key
 let mapleader='\'
 
@@ -86,7 +89,7 @@ vnoremap <leader>l <esc><c-w>l
 
 " Clear the highlight of search results
 nnoremap // :nohlsearch<cr>
-             
+
 " Adjust the window size
 nnoremap <leader>= <c-w>+
 nnoremap <leader>- <c-w>-
@@ -99,16 +102,7 @@ inoremap <leader>. <c-w>>
 vnoremap <leader>= <c-w>+
 vnoremap <leader>- <c-w>-
 vnoremap <leader>, <c-w><
-noremap <leader>. <c-w>>
-
-" Switch to normal mode
-inoremap <leader><leader> <esc>
-vnoremap <leader><leader> <esc>
-
-" Save the current file
-nnoremap <leader>s :w<cr>
-inoremap <leader>s <esc>:w<cr>
-vnoremap <leader>s <esc>:w<cr>
+vnoremap <leader>. <c-w>>
 
 " }}}
 
@@ -135,11 +129,12 @@ augroup END
 " Reload .vimrc, type :PlugInstall to install
 " Type :PlugUpdate to update plugins
 call plug#begin('~/.vim/plugged')
-Plug 'preservim/nerdtree'           " Menu bar
-Plug 'itchyny/lightline.vim'        " Status line
-Plug 'NLKNguyen/papercolor-theme'   " Vim theme
-Plug 'vim-python/python-syntax'     " Python syntax highlighter
-Plug 'ervandew/supertab'            " Auto-completion
+Plug 'preservim/nerdtree'               " Menu bar
+Plug 'itchyny/lightline.vim'            " Status line
+Plug 'NLKNguyen/papercolor-theme'       " Vim theme
+Plug 'vim-python/python-syntax'         " Python syntax highlighter
+Plug 'nathanaelkane/vim-indent-guides'  " Python indent guide
+Plug 'davidhalter/jedi-vim'             " Python autocompletion
 call plug#end()
 
 " NERDTree: Menu bar
@@ -158,22 +153,23 @@ autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' 
 let g:lightline={'colorscheme':'one'}
 
 " papercolor-theme: Vim theme
+" Customised theme
 let g:PaperColor_Theme_Options = {
   \   'theme': {
   \     'default.dark': {
   \       'override' : {
-  \         'folded_fg' : ['', '70'],
+  \         'folded_fg' : ['', '76'],
   \         'folded_bg' : ['', '234'],
-  \         'color05' : ['', '245'],
+  \         'color05' : ['', '248'],
   \         'color13' : ['', '120'],
-  \         'search_bg' : ['', '183'],
-  \         'incsearch_fg' : ['', '183'],
-  \         'linenumber_fg' : ['', '245'],
+  \         'search_bg' : ['', '184'],
+  \         'incsearch_fg' : ['', '184'],
+  \         'linenumber_fg' : ['', '248'],
   \         'linenumber_bg' : ['', '234'],
-  \         'vertsplit_fg' : ['', '245'],
-  \         'matchparen_bg' : ['', '245'],
+  \         'vertsplit_fg' : ['', '248'],
+  \         'matchparen_bg' : ['', '111'],
   \         'cursorlinenr_fg' : ['', '255'],
-  \         'cursorlinenr_bg' : ['', '236'],
+  \         'cursorlinenr_bg' : ['', '234'],
   \       }
   \     }
   \   }
@@ -181,7 +177,17 @@ let g:PaperColor_Theme_Options = {
 set background=dark
 colorscheme PaperColor
 
+" vim-indent-guides
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_guide_size=1
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=darkgrey
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkgrey
+
 " python-syntax
 let g:python_highlight_all = 1
+
+" jedi-vim
+let g:jedi#goto_definitions_command = "D"
 
 " }}}
