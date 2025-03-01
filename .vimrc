@@ -65,6 +65,8 @@ set laststatus=2
 " Enable auto completion after pressing the tab key
 set wildmenu wildmode=list:longest
 
+" Set Python line length notifier (72 for docstrings, 80 for code)
+autocmd FileType python setlocal colorcolumn=72,80
 " }}}
 
 
@@ -118,6 +120,8 @@ augroup filetype_vim
     autocmd FileType vim,zsh,sh setlocal foldmethod=marker
     autocmd FileType python setlocal foldmethod=indent
 augroup END
+" automatically unfold when opening a file
+autocmd BufWinEnter * silent! :%foldopen!
 
 " }}}
 
@@ -132,9 +136,10 @@ call plug#begin('~/.vim/plugged')
 Plug 'preservim/nerdtree'               " Menu bar
 Plug 'itchyny/lightline.vim'            " Status line
 Plug 'NLKNguyen/papercolor-theme'       " Vim theme
+Plug 'nathanaelkane/vim-indent-guides'  " Indent guide
 Plug 'vim-python/python-syntax'         " Python syntax highlighter
-Plug 'nathanaelkane/vim-indent-guides'  " Python indent guide
 Plug 'davidhalter/jedi-vim'             " Python autocompletion
+Plug 'xavierd/clang_complete'           " C/C++ autocompletion
 call plug#end()
 
 " NERDTree: Menu bar
@@ -153,23 +158,24 @@ autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' 
 let g:lightline={'colorscheme':'one'}
 
 " papercolor-theme: Vim theme
-" Customised theme
+" Customised theme: https://github.com/NLKNguyen/papercolor-theme/blob/master/DESIGN.md
 let g:PaperColor_Theme_Options = {
   \   'theme': {
   \     'default.dark': {
   \       'override' : {
+  \         'color05' : ['', '248'],
   \         'folded_fg' : ['', '76'],
   \         'folded_bg' : ['', '234'],
-  \         'color05' : ['', '248'],
-  \         'color13' : ['', '120'],
-  \         'search_bg' : ['', '184'],
-  \         'incsearch_fg' : ['', '184'],
+  \         'search_bg' : ['', '248'],
+  \         'incsearch_fg' : ['', '248'],
   \         'linenumber_fg' : ['', '248'],
   \         'linenumber_bg' : ['', '234'],
   \         'vertsplit_fg' : ['', '248'],
-  \         'matchparen_bg' : ['', '111'],
+  \         'matchparen_bg' : ['', '248'],
   \         'cursorlinenr_fg' : ['', '255'],
   \         'cursorlinenr_bg' : ['', '234'],
+  \         'popupmenu_fg' : ['', '248'],
+  \         'popupmenu_bg' : ['', '234'],
   \       }
   \     }
   \   }
@@ -179,15 +185,19 @@ colorscheme PaperColor
 
 " vim-indent-guides
 let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_guide_size=1
+let g:indent_guides_guide_size = 1
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=darkgrey
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkgrey
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=236
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
 
 " python-syntax
 let g:python_highlight_all = 1
 
 " jedi-vim
 let g:jedi#goto_definitions_command = "D"
+let g:jedi#use_tabs_not_buffers = 1
+
+" clang_complete
+let g:clang_library_path='/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
 
 " }}}
